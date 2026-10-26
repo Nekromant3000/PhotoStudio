@@ -12,9 +12,26 @@ def create_tables():
         )
     ''')
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS photographers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            specialization TEXT,
+            portfolio_link TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS services (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            price INTEGER NOT NULL
+        )
+    ''')
+
     conn.commit()
     conn.close()
-    print('База данных и таблица клиентов успешно созданы!')
+    print('База данных: Клиенты, Фотографы и Услуги успешно созданы!')
 
 if __name__ == '__main__':
     create_tables()
