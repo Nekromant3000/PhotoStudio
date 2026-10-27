@@ -33,5 +33,19 @@ def create_tables():
     conn.close()
     print('База данных: Клиенты, Фотографы и Услуги успешно созданы!')
 
+def add_client(name, phone):
+
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        INSERT INTO clients (name, phone)
+        VALUES (?, ?)
+    ''', (name, phone))
+
+    conn.commit()
+    conn.close()
+    print(f'Клиент {name} успешно добавлен в базу!')
+
 if __name__ == '__main__':
     create_tables()
