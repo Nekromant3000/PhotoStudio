@@ -45,7 +45,7 @@ def add_client(name, phone):
 
     conn.commit()
     conn.close()
-    print(f'Клиент {name} успешно добавлен в базу!')
+    print(f"[DB] Запись добавлена: {name}, {phone}")
 
 if __name__ == '__main__':
     create_tables()
