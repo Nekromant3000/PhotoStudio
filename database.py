@@ -47,5 +47,17 @@ def add_client(name, phone):
     conn.close()
     print(f"[DB] Запись добавлена: {name}, {phone}")
 
+def get_all_clients():
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM clients')
+
+    clients_data = cursor.fetchall()
+
+    conn.close()
+    return clients_data
+
 if __name__ == '__main__':
-    create_tables()
+    # create_tables()
+    print(get_all_clients())
