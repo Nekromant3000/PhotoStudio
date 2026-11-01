@@ -1,18 +1,18 @@
 import customtkinter as ctk
-from database import add_client
+from database import add_client, get_all_clients
 
 def show_clients(main_frame):
     for widget in main_frame.winfo_children():
         widget.destroy()
     
     title = ctk.CTkLabel(main_frame, text="Управление клиентами", font=("Comic Sans MS", 24, "bold"))
-    title.pack(pady=20)
+    title.pack(pady=10)
 
     name_entry = ctk.CTkEntry(main_frame, placeholder_text="Имя клиента", width=250)
-    name_entry.pack(pady=10)
+    name_entry.pack(pady=5)
 
     phone_entry = ctk.CTkEntry(main_frame, placeholder_text="Телефон клиента", width=250)
-    phone_entry.pack(pady=10)
+    phone_entry.pack(pady=5)
 
     def save_btn_clicked():
         client_name = name_entry.get()
@@ -20,13 +20,33 @@ def show_clients(main_frame):
 
         if client_name != "":
             add_client(client_name, client_phone)
-
-            name_entry.delete(0, 'end')
-            phone_entry.delete(0, 'end')
-
-            print("[UI] Форма очищена, ожидание нового ввода.")
+            print("[UI] Клиент сохранён.")
+            show_clients(main_frame)
         else:
             print("[UI] Ошибка: Имя не может быть пустым!")
 
     add_btn = ctk.CTkButton(main_frame, text="Добавить клиента", font=("Comic Sans MS", 14), command=save_btn_clicked)
-    add_btn.pack(pady=20)
+    add_btn.pack(pady=10)
+
+    table_label = ctk.CTkLabel(main_frame, text="Список клиентов:", font=("Comic Sans MS", 16, "bold"))
+    table_label.pack(pady=(20, 5))
+
+    scroll_frame = ctk.CTkScrollableFrame(main_frame, width=400, height=200)
+    scroll_frame.pack(pady=5, fill="both", expand=True)
+
+    ctk.CTkLabel(scroll_frame, text="ID", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Имя", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=1, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Телефон", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=2, padx=10, pady=5, sticky="w")
+
+    clients = get_all_clients()
+
+    for index, client in enumerate(clients):
+        row_num = index + 1
+
+        client_id = str(client[0])
+        client_name = client[1]
+        client_phone = client[2]
+
+        ctk.CTkLabel(scroll_frame, text=client_id, font=("Comic Sans MS", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=client_name, font=("Comic Sans MS", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=client_phone, font=("Comic Sans MS", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
