@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from database import add_client, get_all_clients
+from database import add_client, get_all_clients, get_all_photographers,  get_all_services
 
 def show_clients(main_frame):
     for widget in main_frame.winfo_children():
@@ -50,3 +50,39 @@ def show_clients(main_frame):
         ctk.CTkLabel(scroll_frame, text=client_id, font=("Comic Sans MS", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
         ctk.CTkLabel(scroll_frame, text=client_name, font=("Comic Sans MS", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
         ctk.CTkLabel(scroll_frame, text=client_phone, font=("Comic Sans MS", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
+
+def show_schedule(main_frame):
+    for widget in main_frame.winfo_children():
+        widget.destroy()
+
+    title = ctk.CTkLabel(main_frame, text="Расписание и запись", font=("Comic Sans MS", 24, "bold"))
+    title.pack(pady=20)
+
+    clients = get_all_clients()
+    photographers = get_all_photographers()
+    services = get_all_services()
+
+    client_list = [f"{c[0]}: {c[1]}" for c in clients]
+    photo_list = [f"{p[0]}: {p[1]}" for p in photographers]
+    service_list = [f"{s[0]}: {s[1]}" for s in services]
+
+    client_combo = ctk.CTkComboBox(main_frame, values=client_list, width=250)
+    client_combo.pack(pady=10)
+    client_combo.set("Выберете клиента")
+
+    photo_combo = ctk.CTkComboBox(main_frame, values=photo_list, width=250)
+    photo_combo.pack(pady=10)
+    photo_combo.set("Выберете фотографа")
+
+    service_combo = ctk.CTkComboBox(main_frame, values=service_list, width=250)
+    service_combo.pack(pady=10)
+    service_combo.set("Выберете услугу")
+
+    date_entry = ctk.CTkEntry(main_frame, placeholder_text="Дата (ГГГГ-ММ-ДД ЧЧ:ММ)", width=250)
+    date_entry.pack(pady=10)
+
+    def book_clicked():
+        print("Выбрано: ", client_combo.get(), photo_combo.get(), service_combo.get(), date_entry.get())
+
+    btn = ctk.CTkButton(main_frame, text="Записать", font=("Comic Sans MS", 14), command=book_clicked)
+    btn.pack(pady=20)

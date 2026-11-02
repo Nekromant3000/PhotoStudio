@@ -89,6 +89,22 @@ def get_all_clients():
     conn.close()
     return clients_data
 
+def get_all_photographers():
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name FROM photographers")
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
+def get_all_services():
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, title FROM services")
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
 if __name__ == '__main__':
     seed_data()
     # create_tables()
