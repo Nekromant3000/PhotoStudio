@@ -29,9 +29,40 @@ def create_tables():
         )
     ''')
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS bookings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER,
+            photographer_id INTEGER,
+            service_id INTEGER,
+            booking_date TEXT,
+            FOREIGN KEY (client_id) REFERENCES clients (id),
+            FOREIGN KEY (photographer_id) REFERENCES photographers (id),
+            FOREIGN KEY (service_id) REFERENCES services (id)
+        )
+    ''')
+
     conn.commit()
     conn.close()
-    print('База данных: Клиенты, Фотографы и Услуги успешно созданы!')
+    print('[DB] Все 4 таблицы успешно проверены/созданы.')
+
+def seed_data():
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT COUNT(*) FROM services')
+    if cursor.fetchone()[0] == 0:
+        cursor.execute("INSERT INTO services (title, price) VALUES ('Фото с животными', 5000)")
+        cursor.execute("INSERT INTO services (title, price) VALUES ('Свадебная съемка', 15000)")
+        cursor.execute("INSERT INTO services (title, price) VALUES ('Портрет', 3000)")
+        
+        cursor.execute("INSERT INTO photographers (name, specialization, portfolio_link) VALUES ('Анна', 'Свадьбы', 'C:/photos/anna')")
+        cursor.execute("INSERT INTO photographers (name, specialization, portfolio_link) VALUES ('Олег', 'Животные', 'C:/photos/oleg')")
+        
+        conn.commit()
+        print('[DB] Тестовые фотографы и услуги добавлены.')
+
+    conn.close()
 
 def add_client(name, phone):
 
@@ -59,5 +90,6 @@ def get_all_clients():
     return clients_data
 
 if __name__ == '__main__':
+    seed_data()
     # create_tables()
-    print(get_all_clients())
+    # print(get_all_clients())
