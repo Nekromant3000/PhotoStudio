@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking
 from tkinter import filedialog
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 def show_clients(main_frame):
     for widget in main_frame.winfo_children():
@@ -116,11 +116,26 @@ def show_photo_tab(main_frame):
     def convert_to_png():
         current_path = file_path_var.get()
         if current_path != "Файл не выбран":
-            img = Image.open(current_path)
+            img = Image.open(current_path).convert("RGBA")
+
+            try:
+                font = ImageFont.truetype("arial.ttf", 60)
+            except IOError:
+                font = ImageFont.load_default()
+
+            txt_layer = Image.new("RGBA", img.size, (255, 255, 255, 0))
+
+            draw = ImageDraw.Draw(txt_layer)
+            watermark_text = "PhotoStudio Pro"
+
+            draw.text((50, 50), watermark_text, font=font, fill=(255, 255, 255, 128))
+            watermarked_img = Image.alpha_composite(img, txt_layer)
+
             new_path = current_path.rsplit('.', 1)[0] + "_converted.png"
-            img.save(new_path, "PNG")
+            watermarked_img.save(new_path, "PNG")
+
             file_path_var.set(f"Сохранено как: \n{new_path}")
-            print(f"Файл конвертирован: {new_path}")
+            print(f"[UI] Файл конвертирован с водяным знаком: {new_path}")
 
     choose_btn = ctk.CTkButton(main_frame, text="Выбрать фото", font=("Comic Sans MS", 14), command=choose_file)
     choose_btn.pack(pady=10)
