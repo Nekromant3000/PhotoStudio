@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from functions import show_clients, show_schedule
+from functions import show_clients, show_schedule, show_photo_tab
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -24,7 +24,7 @@ btn_clients.pack(pady=10, padx=20)
 btn_schedule = ctk.CTkButton(sidebar_frame, text="Расписание", font=("Comic Sans MS", 14), command=lambda: show_schedule(main_frame))
 btn_schedule.pack(pady=10, padx=20)
 
-btn_photo = ctk.CTkButton(sidebar_frame, text="Обработка фото", font=("Comic Sans MS", 14))
+btn_photo = ctk.CTkButton(sidebar_frame, text="Обработка фото", font=("Comic Sans MS", 14), command=lambda: show_photo_tab(main_frame))
 btn_photo.pack(pady=10, padx=20)
 
 

@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking
+from tkinter import filedialog
+from PIL import Image
 
 def show_clients(main_frame):
     for widget in main_frame.winfo_children():
@@ -96,3 +98,35 @@ def show_schedule(main_frame):
 
     btn = ctk.CTkButton(main_frame, text="Записать", font=("Comic Sans MS", 14), command=book_clicked)
     btn.pack(pady=20)
+
+def show_photo_tab(main_frame):
+    for widget in main_frame.winfo_children():
+            widget.destroy()
+
+    title = ctk.CTkLabel(main_frame, text="Обработка фотографий", font=("Comic Sans MS", 24, "bold"))
+    title.pack(pady=20)
+
+    file_path_var = ctk.StringVar(value="Файл не выбран")
+
+    def choose_file():
+        path = filedialog.askopenfilename(filetypes=[("Images", "*.jpg *.jpeg *.png")])
+        if path:
+            file_path_var.set(path)
+
+    def convert_to_png():
+        current_path = file_path_var.get()
+        if current_path != "Файл не выбран":
+            img = Image.open(current_path)
+            new_path = current_path.rsplit('.', 1)[0] + "_converted.png"
+            img.save(new_path, "PNG")
+            file_path_var.set(f"Сохранено как: \n{new_path}")
+            print(f"Файл конвертирован: {new_path}")
+
+    choose_btn = ctk.CTkButton(main_frame, text="Выбрать фото", font=("Comic Sans MS", 14), command=choose_file)
+    choose_btn.pack(pady=10)
+
+    path_label = ctk.CTkLabel(main_frame, textvariable=file_path_var, text_color="gray")
+    path_label.pack(pady=10)
+
+    convert_btn = ctk.CTkButton(main_frame, text="Конвертировать в PNG", font=("Comic Sans MS", 14), command=convert_to_png)
+    convert_btn.pack(pady=10)
