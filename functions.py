@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from database import add_client, get_all_clients, get_all_photographers,  get_all_services
+from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking
 
 def show_clients(main_frame):
     for widget in main_frame.winfo_children():
@@ -11,7 +11,7 @@ def show_clients(main_frame):
     name_entry = ctk.CTkEntry(main_frame, placeholder_text="Имя клиента", width=250)
     name_entry.pack(pady=5)
 
-    phone_entry = ctk.CTkEntry(main_frame, placeholder_text="Телефон клиента", width=250)
+    phone_entry = ctk.CTkEntry(main_frame, placeholder_text="Телефон клиента (например: 89991234567)", width=250)
     phone_entry.pack(pady=5)
 
     def save_btn_clicked():
@@ -82,7 +82,17 @@ def show_schedule(main_frame):
     date_entry.pack(pady=10)
 
     def book_clicked():
-        print("Выбрано: ", client_combo.get(), photo_combo.get(), service_combo.get(), date_entry.get())
+        client_id = client_combo.get().split(":")[0]
+        photo_id = photo_combo.get().split(":")[0]
+        service_id = service_combo.get().split(":")[0]
+        date = date_entry.get()
+
+        if "Выберите" not in client_id and date != "":
+            add_booking(client_id, photo_id, service_id, date)
+            print("[UI] Запись успешно оформлена.")
+            date_entry.delete(0, 'end')
+        else:
+            print("[UI] Ошибка: Заполните все поля корректно.")
 
     btn = ctk.CTkButton(main_frame, text="Записать", font=("Comic Sans MS", 14), command=book_clicked)
     btn.pack(pady=20)
