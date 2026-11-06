@@ -128,7 +128,7 @@ def show_photo_tab(main_frame):
             draw = ImageDraw.Draw(txt_layer)
             watermark_text = "PhotoStudio Pro"
 
-            draw.text((50, 50), watermark_text, font=font, fill=(255, 255, 255, 128))
+            draw.text((50, 50), watermark_text, font=font, fill=(128, 137, 138, 128))
             watermarked_img = Image.alpha_composite(img, txt_layer)
 
             new_path = current_path.rsplit('.', 1)[0] + "_converted.png"
@@ -169,8 +169,8 @@ def show_photo_tab(main_frame):
     path_label = ctk.CTkLabel(main_frame, textvariable=file_path_var, text_color="gray")
     path_label.pack(pady=10)
 
-    convert_btn = ctk.CTkButton(main_frame, text="Конвертировать в PNG", font=("Comic Sans MS", 14), command=convert_to_png)
+    convert_btn = ctk.CTkButton(main_frame, text="Конвертировать в PNG и добавить водяной знак", font=("Comic Sans MS", 14), command=convert_to_png)
     convert_btn.pack(pady=10)
 
-    convert_jpg_btn = ctk.CTkButton(main_frame, text="Конвертировать в JPG", font=("Comic Sans MS", 14), command=convert_to_jpg)
+    convert_jpg_btn = ctk.CTkButton(main_frame, text="Конвертировать в JPG и добавить водяной знак", font=("Comic Sans MS", 14), command=convert_to_jpg)
     convert_jpg_btn.pack(pady=10)
