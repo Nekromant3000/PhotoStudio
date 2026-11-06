@@ -89,6 +89,30 @@ def get_all_clients():
     conn.close()
     return clients_data
 
+def delete_client(client_id):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+
+    cursor.execute('DELETE FROM clients WHERE id = ?', (client_id,))
+
+    conn.commit()
+    conn.close()
+    print(f"[DB] Клиент с ID {client_id} удалён.")
+
+def update_client(client_id, new_name, new_phone):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE clients
+        SET name = ?, phone = ?
+        WHERE id = ?
+    ''', (new_name, new_phone, client_id))
+
+    conn.commit()
+    conn.close()
+    print(f"[DB] Данные клиента с ID {client_id} обновлены.")
+
 def get_all_photographers():
     conn = sqlite3.connect("photostudio.db")
     cursor = conn.cursor()
@@ -121,4 +145,3 @@ def add_booking(client_id, photographer_id, service_id, date):
 if __name__ == '__main__':
     create_tables()
     seed_data()
-    # print(get_all_clients())
