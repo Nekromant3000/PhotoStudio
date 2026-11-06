@@ -142,6 +142,27 @@ def add_booking(client_id, photographer_id, service_id, date):
     conn.close()
     print(f"[DB] Запись на {date} успешно создана.")
 
+def get_all_bookings():
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT
+            bookings.id,
+            clients.name,
+            photographers.name,
+            services.title,
+            bookings.booking_date
+        FROM bookings
+        JOIN clients ON bookings.client_id = clients.id
+        JOIN photographers ON bookings.photographer_id = photographers.id
+        JOIN services ON bookings.service_id = services.id
+    ''')
+
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
 if __name__ == '__main__':
     create_tables()
     seed_data()

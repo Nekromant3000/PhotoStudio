@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking
+from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking, get_all_bookings
 from tkinter import filedialog
 from PIL import Image, ImageDraw, ImageFont
 
@@ -98,6 +98,29 @@ def show_schedule(main_frame):
 
     btn = ctk.CTkButton(main_frame, text="Записать", font=("Comic Sans MS", 14), command=book_clicked)
     btn.pack(pady=20)
+
+    schedule_label = ctk.CTkLabel(main_frame, text="Текущие записи:", font=("Comic Sans MS", 16, "bold"))
+    schedule_label.pack(pady=(20, 5))
+
+    scroll_frame = ctk.CTkScrollableFrame(main_frame, width=600, height=200)
+    scroll_frame.pack(pady=5, fill="both", expand=True)
+
+    ctk.CTkLabel(scroll_frame, text="ID", font=("Arial", 14, "bold")).grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Клиент", font=("Arial", 14, "bold")).grid(row=0, column=1, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Фотограф", font=("Arial", 14, "bold")).grid(row=0, column=2, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Услуга", font=("Arial", 14, "bold")).grid(row=0, column=3, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Дата", font=("Arial", 14, "bold")).grid(row=0, column=4, padx=10, pady=5, sticky="w")
+
+    bookings = get_all_bookings()
+
+    for index, booking in enumerate(bookings):
+        row_num = index + 1
+
+        ctk.CTkLabel(scroll_frame, text=str(booking[0]), font=("Arial", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=booking[1], font=("Arial", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=booking[2], font=("Arial", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=booking[3], font=("Arial", 14)).grid(row=row_num, column=3, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=booking[4], font=("Arial", 14)).grid(row=row_num, column=4, padx=10, pady=2, sticky="w")
 
 def show_photo_tab(main_frame):
     for widget in main_frame.winfo_children():
