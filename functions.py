@@ -137,6 +137,32 @@ def show_photo_tab(main_frame):
             file_path_var.set(f"Сохранено как: \n{new_path}")
             print(f"[UI] Файл конвертирован с водяным знаком: {new_path}")
 
+    def convert_to_jpg():
+        current_path = file_path_var.get()
+        if current_path != "Файл не выбран":
+            img = Image.open(current_path).convert("RGBA")
+
+            try:
+                font = ImageFont.truetype("arial.ttf", 60)
+            except IOError:
+                font = ImageFont.load_default()
+
+            txt_layer = Image.new("RGBA", img.size, (255, 255, 255, 0))
+
+            draw = ImageDraw.Draw(txt_layer)
+            watermark_text = "PhotoStudio Pro"
+
+            draw.text((50, 50), watermark_text, font=font, fill=(128, 137, 138, 128))
+            watermarked_img = Image.alpha_composite(img, txt_layer)
+
+            final_image = watermarked_img.convert("RGB")
+
+            new_path = current_path.rsplit('.', 1)[0] + "_converted.jpg"
+            final_image.save(new_path, "JPEG")
+
+            file_path_var.set(f"Сохранено как: \n{new_path}")
+            print(f"[UI] Файл конвертирован с водяным знаком: {new_path}")
+
     choose_btn = ctk.CTkButton(main_frame, text="Выбрать фото", font=("Comic Sans MS", 14), command=choose_file)
     choose_btn.pack(pady=10)
 
@@ -145,3 +171,6 @@ def show_photo_tab(main_frame):
 
     convert_btn = ctk.CTkButton(main_frame, text="Конвертировать в PNG", font=("Comic Sans MS", 14), command=convert_to_png)
     convert_btn.pack(pady=10)
+
+    convert_jpg_btn = ctk.CTkButton(main_frame, text="Конвертировать в JPG", font=("Comic Sans MS", 14), command=convert_to_jpg)
+    convert_jpg_btn.pack(pady=10)

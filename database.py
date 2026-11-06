@@ -119,6 +119,6 @@ def add_booking(client_id, photographer_id, service_id, date):
     print(f"[DB] Запись на {date} успешно создана.")
 
 if __name__ == '__main__':
+    create_tables()
     seed_data()
-    # create_tables()
     # print(get_all_clients())
