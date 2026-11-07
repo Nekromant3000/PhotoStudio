@@ -163,6 +163,16 @@ def get_all_bookings():
     conn.close()
     return data
 
+def delete_booking(booking_id):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+
+    cursor.execute('DELETE FROM bookings WHERE id = ?', booking_id)
+
+    conn.commit()
+    conn.close()
+    print(f"[DB] Запись с ID {booking_id} отменена.")
+
 if __name__ == '__main__':
     create_tables()
     seed_data()

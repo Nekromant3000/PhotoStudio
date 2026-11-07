@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking, get_all_bookings
+from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking, get_all_bookings, delete_booking
 from tkinter import filedialog
 from PIL import Image, ImageDraw, ImageFont
 
@@ -110,17 +110,32 @@ def show_schedule(main_frame):
     ctk.CTkLabel(scroll_frame, text="Фотограф", font=("Arial", 14, "bold")).grid(row=0, column=2, padx=10, pady=5, sticky="w")
     ctk.CTkLabel(scroll_frame, text="Услуга", font=("Arial", 14, "bold")).grid(row=0, column=3, padx=10, pady=5, sticky="w")
     ctk.CTkLabel(scroll_frame, text="Дата", font=("Arial", 14, "bold")).grid(row=0, column=4, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Действие", font=("Arial", 14, "bold")).grid(row=0, column=5, padx=10, pady=5, sticky="w")
 
     bookings = get_all_bookings()
+
+    def delete_action(booking_id):
+        delete_booking(booking_id)
+        print("[UI] Запись удалена, обновляю таблицу.")
+        show_schedule(main_frame)
 
     for index, booking in enumerate(bookings):
         row_num = index + 1
 
-        ctk.CTkLabel(scroll_frame, text=str(booking[0]), font=("Arial", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
-        ctk.CTkLabel(scroll_frame, text=booking[1], font=("Arial", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
-        ctk.CTkLabel(scroll_frame, text=booking[2], font=("Arial", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
-        ctk.CTkLabel(scroll_frame, text=booking[3], font=("Arial", 14)).grid(row=row_num, column=3, padx=10, pady=2, sticky="w")
-        ctk.CTkLabel(scroll_frame, text=booking[4], font=("Arial", 14)).grid(row=row_num, column=4, padx=10, pady=2, sticky="w")
+        b_id = str(booking[0])
+        b_client = booking[1]
+        b_photo = booking[2]
+        b_service = booking[3]
+        b_date = booking[4]
+
+        ctk.CTkLabel(scroll_frame, text=b_id, font=("Arial", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=b_client, font=("Arial", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=b_photo, font=("Arial", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=b_service, font=("Arial", 14)).grid(row=row_num, column=3, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=b_date, font=("Arial", 14)).grid(row=row_num, column=4, padx=10, pady=2, sticky="w")
+
+        del_btn = ctk.CTkButton(scroll_frame, text="Отменить", fg_color="red", width=80, command=lambda current_id=b_id: delete_action(current_id))
+        del_btn.grid(row=row_num, column=5, padx=10, pady=2, sticky="w")
 
 def show_photo_tab(main_frame):
     for widget in main_frame.winfo_children():
