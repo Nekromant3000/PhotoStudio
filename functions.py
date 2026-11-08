@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from database import add_client, get_all_clients, get_all_photographers,  get_all_services, add_booking, get_all_bookings, delete_booking
+from database import add_client, get_all_clients, delete_client, update_client, get_all_photographers,  get_all_services, add_booking, get_all_bookings, delete_booking
 from tkinter import filedialog
 from PIL import Image, ImageDraw, ImageFont
 
@@ -16,18 +16,27 @@ def show_clients(main_frame):
     phone_entry = ctk.CTkEntry(main_frame, placeholder_text="Телефон клиента (например: 89991234567)", width=250)
     phone_entry.pack(pady=5)
 
+    current_edit_id = None
+
     def save_btn_clicked():
+        nonlocal current_edit_id
         client_name = name_entry.get()
         client_phone = phone_entry.get()
 
         if client_name != "":
-            add_client(client_name, client_phone)
-            print("[UI] Клиент сохранён.")
+            if current_edit_id is None:
+                add_client(client_name, client_phone)
+                print("[UI] Клиент сохранён.")
+            else:
+                update_client(current_edit_id, client_name, client_phone)
+                print(f"[UI] Клиент {current_edit_id} обновлён.")
+                current_edit_id = None
+
             show_clients(main_frame)
         else:
             print("[UI] Ошибка: Имя не может быть пустым!")
 
-    add_btn = ctk.CTkButton(main_frame, text="Добавить клиента", font=("Comic Sans MS", 14), command=save_btn_clicked)
+    add_btn = ctk.CTkButton(main_frame, text="Сохранить", font=("Comic Sans MS", 14), command=save_btn_clicked)
     add_btn.pack(pady=10)
 
     table_label = ctk.CTkLabel(main_frame, text="Список клиентов:", font=("Comic Sans MS", 16, "bold"))
@@ -39,19 +48,44 @@ def show_clients(main_frame):
     ctk.CTkLabel(scroll_frame, text="ID", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=0, padx=10, pady=5, sticky="w")
     ctk.CTkLabel(scroll_frame, text="Имя", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=1, padx=10, pady=5, sticky="w")
     ctk.CTkLabel(scroll_frame, text="Телефон", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=2, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(scroll_frame, text="Действия", font=("Comic Sans MS", 14, "bold")).grid(row=0, column=3, padx=10, pady=5, sticky="w")
 
     clients = get_all_clients()
+
+    def edit_action(c_id, c_name, c_phone):
+        nonlocal current_edit_id
+        current_edit_id = c_id
+
+        name_entry.delete(0, 'end')
+        name_entry.insert(0, c_name)
+        phone_entry.delete(0, 'end')
+        phone_entry.insert(0, c_phone)
+        add_btn.configure(text="Обновить данные")
+
+    def delete_action(c_id):
+        delete_client(c_id)
+        print("[UI] Клиент удалён.")
+        show_clients(main_frame)
 
     for index, client in enumerate(clients):
         row_num = index + 1
 
-        client_id = str(client[0])
-        client_name = client[1]
-        client_phone = client[2]
+        c_id = client[0]
+        c_name = client[1]
+        c_phone = client[2]
 
-        ctk.CTkLabel(scroll_frame, text=client_id, font=("Comic Sans MS", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
-        ctk.CTkLabel(scroll_frame, text=client_name, font=("Comic Sans MS", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
-        ctk.CTkLabel(scroll_frame, text=client_phone, font=("Comic Sans MS", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=str(c_id), font=("Comic Sans MS", 14)).grid(row=row_num, column=0, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=c_name, font=("Comic Sans MS", 14)).grid(row=row_num, column=1, padx=10, pady=2, sticky="w")
+        ctk.CTkLabel(scroll_frame, text=c_phone, font=("Comic Sans MS", 14)).grid(row=row_num, column=2, padx=10, pady=2, sticky="w")
+
+        action_frame = ctk.CTkFrame(scroll_frame, fg_color="transparent")
+        action_frame.grid(row=row_num, column=3, padx=10, pady=2, sticky="w")
+
+        edit_btn = ctk.CTkButton(action_frame, text="Изменить", width=60, command=lambda id=c_id, n=c_name, p=c_phone: edit_action(id, n, p))
+        edit_btn.pack(side="left", padx=2)
+
+        del_btn = ctk.CTkButton(action_frame, text="Удалить", fg_color="red", width=60, command=lambda id=c_id: delete_action(id))
+        del_btn.pack(side="left", padx=2)
 
 def show_schedule(main_frame):
     for widget in main_frame.winfo_children():

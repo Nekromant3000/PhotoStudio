@@ -1,5 +1,8 @@
 import customtkinter as ctk
 from functions import show_clients, show_schedule, show_photo_tab
+from database import create_tables
+
+create_tables()
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
