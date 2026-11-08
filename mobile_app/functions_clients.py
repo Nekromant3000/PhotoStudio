@@ -11,7 +11,7 @@ import database
 
 def get_busy_slots(photographer_id, date_str):
     try:
-        conn = sqlite3.connect("photostudio.db")
+        conn = sqlite3.connect(database.DB_PATH)
         cursor = conn.cursor()
         cursor.execute(
             "SELECT booking_date FROM bookings WHERE photographer_id = ? AND booking_date LIKE ?", 
@@ -182,12 +182,13 @@ def show_photo(main_frame):
     scroll_frame = ctk.CTkScrollableFrame(main_frame, fg_color="transparent")
     scroll_frame.pack(fill="both", expand=True, pady=5, padx=10)
 
-    works = [
-        ("photo1.jpg", "Свадебная съемка", "Фотограф: Анна"),
-        ("photo2.jpg", "Студийный портрет", "Фотограф: Олег"),
-        ("photo3.jpg", "Съемка с собаками", "Фотограф: Олег"),
-        ("photo4.jpg", "Выездная фотосессия", "Фотограф: Анна")
-    ]
+    photographers = database.get_all_photographers()
+    works = []
+    for p in photographers:
+        path = p[3]
+        title = p[2]
+        author = f"Фотограф: {p[1]}"
+        works.append((path, title, author))
 
     for path, title, author in works:
         card = ctk.CTkFrame(scroll_frame, corner_radius=10, fg_color="#27272a")

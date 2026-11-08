@@ -94,13 +94,13 @@ def show_photographers(main_frame):
     title = ctk.CTkLabel(main_frame, text="Управление фотографами", font=("Comic Sans MS", 24, "bold"))
     title.pack(pady=10)
 
-    name_entry = ctk.CTkEntry(main_frame, placeholder_text="Имя фотографа", width=250)
+    name_entry = ctk.CTkEntry(main_frame, placeholder_text="Имя фотографа", width=400)
     name_entry.pack(pady=5)
 
-    spec_entry = ctk.CTkEntry(main_frame, placeholder_text="Специализация (например: Свадьбы)", width=250)
+    spec_entry = ctk.CTkEntry(main_frame, placeholder_text="Специализация (например: Свадьбы)", width=400)
     spec_entry.pack(pady=5)
     
-    link_entry = ctk.CTkEntry(main_frame, placeholder_text="Ссылка на портфолио (например: C:/photos/anna)", width=250)
+    link_entry = ctk.CTkEntry(main_frame, placeholder_text="Ссылка на портфолио (например: C:/photos/anna/photo.jpg)", width=400)
     link_entry.pack(pady=5)
 
     current_edit_id = None
