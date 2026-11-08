@@ -1,7 +1,10 @@
 import sqlite3
+import os
+
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'photostudio.db')
 
 def create_tables():
-    conn = sqlite3.connect('photostudio.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -47,7 +50,7 @@ def create_tables():
     print('[DB] Все 4 таблицы успешно проверены/созданы.')
 
 def seed_data():
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('SELECT COUNT(*) FROM services')
@@ -66,7 +69,7 @@ def seed_data():
 
 def add_client(name, phone):
 
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -79,7 +82,7 @@ def add_client(name, phone):
     print(f"[DB] Запись добавлена: {name}, {phone}")
 
 def get_all_clients():
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM clients')
@@ -90,7 +93,7 @@ def get_all_clients():
     return clients_data
 
 def delete_client(client_id):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('DELETE FROM clients WHERE id = ?', (client_id,))
@@ -100,7 +103,7 @@ def delete_client(client_id):
     print(f"[DB] Клиент с ID {client_id} удалён.")
 
 def update_client(client_id, new_name, new_phone):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -114,7 +117,7 @@ def update_client(client_id, new_name, new_phone):
     print(f"[DB] Данные клиента с ID {client_id} обновлены.")
 
 def add_photographer(name, specialization, portfolio_link):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO photographers (name, specialization, portfolio_link)
@@ -125,7 +128,7 @@ def add_photographer(name, specialization, portfolio_link):
     print(f"[DB] Фотограф добавлен: {name}")
 
 def get_all_photographers():
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM photographers")
     data = cursor.fetchall()
@@ -133,7 +136,7 @@ def get_all_photographers():
     return data
 
 def delete_photographer(photo_id):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('DELETE FROM photographers WHERE id = ?', (photo_id,))
     conn.commit()
@@ -141,7 +144,7 @@ def delete_photographer(photo_id):
     print(f"[DB] Фотограф с ID {photo_id} удалён.")
 
 def update_photographer(photo_id, new_name, new_spec, new_link):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         UPDATE photographers
@@ -153,7 +156,7 @@ def update_photographer(photo_id, new_name, new_spec, new_link):
     print(f"[DB] Данные фотографа с ID {photo_id} обновлены.")
 
 def add_service(title, price):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO services (title, price)
@@ -164,7 +167,7 @@ def add_service(title, price):
     print(f"[DB] Услуга добавлена: {title}")
 
 def get_all_services():
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM services")
     data = cursor.fetchall()
@@ -172,7 +175,7 @@ def get_all_services():
     return data
 
 def delete_service(service_id):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('DELETE FROM services WHERE id = ?', (service_id,))
     conn.commit()
@@ -180,7 +183,7 @@ def delete_service(service_id):
     print(f"[DB] Услуга с ID {service_id} удалёна.")
 
 def update_service(service_id, new_title, new_price):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         UPDATE services
@@ -192,7 +195,7 @@ def update_service(service_id, new_title, new_price):
     print(f"[DB] Данные услуги с ID {service_id} обновлены.")
 
 def add_booking(client_id, photographer_id, service_id, date):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -205,7 +208,7 @@ def add_booking(client_id, photographer_id, service_id, date):
     print(f"[DB] Запись на {date} успешно создана.")
 
 def get_all_bookings():
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     cursor.execute('''
@@ -226,7 +229,7 @@ def get_all_bookings():
     return data
 
 def delete_booking(booking_id):
-    conn = sqlite3.connect("photostudio.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute('DELETE FROM bookings WHERE id = ?', booking_id)

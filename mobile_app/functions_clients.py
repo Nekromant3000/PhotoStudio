@@ -2,11 +2,12 @@ import customtkinter as ctk
 import sqlite3
 from tkinter import messagebox
 from PIL import Image, ImageTk
-import database
 import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+import database
 
 def get_busy_slots(photographer_id, date_str):
     try:

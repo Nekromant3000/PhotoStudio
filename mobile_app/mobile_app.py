@@ -1,14 +1,15 @@
 import customtkinter as ctk
-import database
-from functions_clients import new_entry, show_photo
 import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+import database
+from functions_clients import new_entry, show_photo
+
 # Инициализация БДшки
 database.create_tables()
-database.seed_data()
+# database.seed_data()
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
