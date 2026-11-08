@@ -113,21 +113,83 @@ def update_client(client_id, new_name, new_phone):
     conn.close()
     print(f"[DB] Данные клиента с ID {client_id} обновлены.")
 
+def add_photographer(name, specialization, portfolio_link):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO photographers (name, specialization, portfolio_link)
+        VALUES (?, ?, ?)
+    ''', (name, specialization, portfolio_link))
+    conn.commit()
+    conn.close()
+    print(f"[DB] Фотограф добавлен: {name}")
+
 def get_all_photographers():
     conn = sqlite3.connect("photostudio.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name FROM photographers")
+    cursor.execute("SELECT * FROM photographers")
     data = cursor.fetchall()
     conn.close()
     return data
 
+def delete_photographer(photo_id):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM photographers WHERE id = ?', (photo_id,))
+    conn.commit()
+    conn.close()
+    print(f"[DB] Фотограф с ID {photo_id} удалён.")
+
+def update_photographer(photo_id, new_name, new_spec, new_link):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE photographers
+        SET name = ?, specialization = ?, portfolio_link = ?
+        WHERE id = ?
+    ''', (new_name, new_spec, new_link, photo_id))
+    conn.commit()
+    conn.close()
+    print(f"[DB] Данные фотографа с ID {photo_id} обновлены.")
+
+def add_service(title, price):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO services (title, price)
+        VALUES (?, ?)
+    ''', (title, price))
+    conn.commit()
+    conn.close()
+    print(f"[DB] Услуга добавлена: {title}")
+
 def get_all_services():
     conn = sqlite3.connect("photostudio.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, title FROM services")
+    cursor.execute("SELECT * FROM services")
     data = cursor.fetchall()
     conn.close()
     return data
+
+def delete_service(service_id):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM services WHERE id = ?', (service_id,))
+    conn.commit()
+    conn.close()
+    print(f"[DB] Услуга с ID {service_id} удалёна.")
+
+def update_service(service_id, new_title, new_price):
+    conn = sqlite3.connect("photostudio.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE services
+        SET title = ?, price = ?
+        WHERE id = ?
+    ''', (new_title, new_price, service_id))
+    conn.commit()
+    conn.close()
+    print(f"[DB] Данные услуги с ID {service_id} обновлены.")
 
 def add_booking(client_id, photographer_id, service_id, date):
     conn = sqlite3.connect("photostudio.db")

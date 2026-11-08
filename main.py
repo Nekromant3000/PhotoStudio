@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from functions import show_clients, show_schedule, show_photo_tab
+from functions import show_clients, show_photographers, show_services, show_schedule, show_photo_tab
 from database import create_tables
 
 create_tables()
@@ -23,6 +23,12 @@ logo_label.pack(pady=20, padx=20)
 
 btn_clients = ctk.CTkButton(sidebar_frame, text="Клиенты", font=("Comic Sans MS", 14), command=lambda: show_clients(main_frame))
 btn_clients.pack(pady=10, padx=20)
+
+btn_photographers = ctk.CTkButton(sidebar_frame, text="Фотографы", font=("Comic Sans MS", 14), command=lambda: show_photographers(main_frame))
+btn_photographers.pack(pady=10, padx=20)
+
+btn_services = ctk.CTkButton(sidebar_frame, text="Услуги", font=("Comic Sans MS", 14), command=lambda: show_services(main_frame))
+btn_services.pack(pady=10, padx=20)
 
 btn_schedule = ctk.CTkButton(sidebar_frame, text="Расписание", font=("Comic Sans MS", 14), command=lambda: show_schedule(main_frame))
 btn_schedule.pack(pady=10, padx=20)
