@@ -290,7 +290,7 @@ def show_schedule(main_frame):
         if "Выберите" not in client_id and date != "":
             add_booking(client_id, photo_id, service_id, date)
             print("[UI] Запись успешно оформлена.")
-            date_entry.delete(0, 'end')
+            show_schedule(main_frame)
         else:
             print("[UI] Ошибка: Заполните все поля корректно.")
 
